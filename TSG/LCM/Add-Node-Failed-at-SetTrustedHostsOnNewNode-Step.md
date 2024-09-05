@@ -8,6 +8,7 @@ ScaleOutOperation action plan for Add node operation will fail with below messag
 Connecting to remote server <host-name> failed with the following error message : Access is denied.
 ```
 # Mitigation 
+### Apply below mitigation only if PowerShell command ```((Get-StampInformation).InstallationMethod)``` on any clustered host returns **Upgrade** <br/>
 Follow below steps to manually set trusted hosts and resume Add node operation by skipping the SetTrustedHostsOnNewNode step.<br/>
 **1.) Run below PowerShell commands in a host to set Trusted hosts on all hosts in the cluster.**
 ```

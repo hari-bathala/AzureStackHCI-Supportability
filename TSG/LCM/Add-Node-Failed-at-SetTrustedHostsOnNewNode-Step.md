@@ -51,12 +51,12 @@ foreach ($hostName in $hostNames)
 
 # Set Brownfield EnvironmentType reg key in new node.
 $key = try {
-        Get-Item -Path "HKLM:\Software\Microsoft\LCMAzureStackStampInformation" -ErrorAction Stop
-    }
-    catch {
-        New-Item -Path "HKLM:\Software\Microsoft\LCMAzureStackStampInformation" -Force
-    }
-    New-ItemProperty -Path $key.PSPath -Name "EnvironmentType" -Value "Brownfield" -Force
+    Get-Item -Path "HKLM:\Software\Microsoft\LCMAzureStackStampInformation" -ErrorAction Stop
+}
+catch {
+    New-Item -Path "HKLM:\Software\Microsoft\LCMAzureStackStampInformation" -Force
+}
+New-ItemProperty -Path $key.PSPath -Name "EnvironmentType" -Value "Brownfield" -Force
     
 # Copy trusted from above verbose and paste below
 $trustedHosts = "<copied trusted hosts from above verbose>"

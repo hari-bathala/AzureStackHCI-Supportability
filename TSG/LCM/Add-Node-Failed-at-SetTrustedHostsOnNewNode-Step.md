@@ -3,7 +3,7 @@
 
 This article describes how to resume Add node operation on a brownfield upgraded cluster when failed at SetTrustedHostsOnNewNode.
 # Symptoms
-ScaleOutOperation action plan for Add node operation will fail with below message at SetTrustedHostsOnNewNode step.
+In 2408 build, ScaleOutOperation action plan for Add node operation will fail with below message at SetTrustedHostsOnNewNode step.
 ```
 Connecting to remote server <host-name> failed with the following error message : Access is denied.
 ```

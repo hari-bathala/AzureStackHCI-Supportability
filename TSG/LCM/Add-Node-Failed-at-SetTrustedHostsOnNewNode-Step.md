@@ -45,7 +45,7 @@ foreach ($hostName in $hostNames)
 }
 ```
 **Copy and save Existing Trusted Hosts value from above command's verbose**<br/>
-**2.) Run below PowerShell commands in new node to set all hosts names and ips in the cluster for Trusted hosts.**
+**2.) Run below PowerShell commands in new node to EnvironmentType Reg key and set all hosts names and ips in the cluster for Trusted hosts.**
 ```
 # Login to new node using local admin credential
 

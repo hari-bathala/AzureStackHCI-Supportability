@@ -13,36 +13,39 @@ Follow below steps to manually set trusted hosts and resume Add node operation b
 **1.) Run below PowerShell commands in a host to set Trusted hosts on all hosts in the cluster.**
 ```
 # Update below line with all host names in the cluster.
-$hostNames = "<host-name1>", "<host-name2>"
-
-# Update below lines with new host's name and IP.
-$newHostName = "<new-host-name>"
-$newHostIp = "<new-host-ip>"
-
-# Set existing host’s domain admin credential
-$DomainAdminCredential = Get-Credential
-foreach ($hostName in $hostNames) {
-    $hosts += ","
-    $hosts += Invoke-Command -ComputerName $hostName -ScriptBlock {
-        (Get-Item -Path WSMan:\localhost\Client\TrustedHosts).Value                     
-    } -Credential $DomainAdminCredential
-}
-
-# Sets trusted in all hosts in the cluster
-$hosts = "$newHostName,$newHostIp"
-foreach ($hostName in $hostNames)
+if (((Get-StampInformation).InstallationMethod) -eq "Upgrade")
 {
-    Invoke-Command -ComputerName $hostName -ScriptBlock {
-        $trustedHosts = $using:hosts
-        $existingTrustedHosts = (Get-Item -Path WSMan:\localhost\Client\TrustedHosts).Value
-        Trace-Execution "Existing Trusted Hosts: $existingTrustedHosts"
-        if (![string]::IsNullOrEmpty($existingTrustedHosts) -and $existingTrustedHosts -ne "*")
-        {
-            $trustedHosts = (($existingTrustedHosts.Split(",") + $trustedHosts.Split(",")) | select -uniq) -join ','
-        }
-        Trace-Execution "Adding Trusted Hosts: $trustedHosts"
-        Set-Item WSMan:\localhost\Client\TrustedHosts -Value $trustedHosts -Force
-    } -Credential $DomainAdminCredential
+    $hostNames = "<host-name1>", "<host-name2>"
+    
+    # Update below lines with new host's name and IP.
+    $newHostName = "<new-host-name>"
+    $newHostIp = "<new-host-ip>"
+    
+    # Set existing host’s domain admin credential
+    $DomainAdminCredential = Get-Credential
+    foreach ($hostName in $hostNames) {
+        $hosts += ","
+        $hosts += Invoke-Command -ComputerName $hostName -ScriptBlock {
+            (Get-Item -Path WSMan:\localhost\Client\TrustedHosts).Value                     
+        } -Credential $DomainAdminCredential
+    }
+    
+    # Sets trusted in all hosts in the cluster
+    $hosts = "$newHostName,$newHostIp"
+    foreach ($hostName in $hostNames)
+    {
+        Invoke-Command -ComputerName $hostName -ScriptBlock {
+            $trustedHosts = $using:hosts
+            $existingTrustedHosts = (Get-Item -Path WSMan:\localhost\Client\TrustedHosts).Value
+            Trace-Execution "Existing Trusted Hosts: $existingTrustedHosts"
+            if (![string]::IsNullOrEmpty($existingTrustedHosts) -and $existingTrustedHosts -ne "*")
+            {
+                $trustedHosts = (($existingTrustedHosts.Split(",") + $trustedHosts.Split(",")) | select -uniq) -join ','
+            }
+            Trace-Execution "Adding Trusted Hosts: $trustedHosts"
+            Set-Item WSMan:\localhost\Client\TrustedHosts -Value $trustedHosts -Force
+        } -Credential $DomainAdminCredential
+    }
 }
 ```
 **Copy and save Existing Trusted Hosts value from above command's verbose**<br/>
@@ -156,8 +159,11 @@ $ActionPlanInstanceID
 **4.) Run below PowerShell commands in the same host as Step 3 to skip failed Step and resumes Add node operation.**
 ```
 # Update failed ScaleOutOperation action plan’s ActionPlanInstanceID to variable $instanceid
-$instanceId = "<ScaleOutOperation action plan’s instanceid>"
-Skip-FailedStepsInActionPlan -ActionPlanInstanceID $instanceId
+if (((Get-StampInformation).InstallationMethod) -eq "Upgrade")
+{
+    $instanceId = "<ScaleOutOperation action plan’s instanceid>"
+    Skip-FailedStepsInActionPlan -ActionPlanInstanceID $instanceId
+}
 ```
 This will print out the failed tasks and then prompt for confirmation. Please check that the tasks called out are all "SetTrustedHostsOnNewNode", and then confirm. The Add node should be resumed with failed steps skipped.
 

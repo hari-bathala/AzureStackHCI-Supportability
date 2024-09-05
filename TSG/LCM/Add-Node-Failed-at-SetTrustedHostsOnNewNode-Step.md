@@ -49,7 +49,7 @@ foreach ($hostName in $hostNames)
 ```
 # Login to new node using local admin credential
 
-# Set Brownfieldreg key in new node.
+# Set Brownfield EnvironmentType reg key in new node.
 $key = try {
         Get-Item -Path "HKLM:\Software\Microsoft\LCMAzureStackStampInformation" -ErrorAction Stop
     }

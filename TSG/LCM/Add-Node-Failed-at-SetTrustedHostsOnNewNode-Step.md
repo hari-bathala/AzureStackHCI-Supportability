@@ -45,7 +45,7 @@ foreach ($hostName in $hostNames)
 }
 ```
 **Copy and save Existing Trusted Hosts value from above command's verbose**<br/>
-**2.) Run below PowerShell commands in new node to set Trusted hosts on all hosts in the cluster.**
+**2.) Run below PowerShell commands in new node to set all hosts names and ips in the cluster for Trusted hosts.**
 ```
 # Login to new node using local admin credential
 
@@ -152,13 +152,13 @@ $ActionPlanInstanceID
 }
 ```
 
-**4.) Run below PowerShell commands in the same host as Step 3 to skip failed Step and resumes add node.**
+**4.) Run below PowerShell commands in the same host as Step 3 to skip failed Step and resumes Add node operation.**
 ```
-#Update failed ScaleOutOperation action plan’s ActionPlanInstanceID to variable $instanceid
+# Update failed ScaleOutOperation action plan’s ActionPlanInstanceID to variable $instanceid
 $instanceId = "<ScaleOutOperation action plan’s instanceid>"
 Skip-FailedStepsInActionPlan -ActionPlanInstanceID $instanceId
 ```
 This will print out the failed tasks and then prompt for confirmation. Please check that the tasks called out are all "SetTrustedHostsOnNewNode", and then confirm. The Add node should be resumed with failed steps skipped.
 
-**5.) Track Add node status using new Action plan ID printed from step 4.**
+**5.) Track Add node status using new Action plan Instance id printed from step 4.**
 
